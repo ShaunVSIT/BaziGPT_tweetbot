@@ -1,0 +1,26 @@
+{
+    "name": "bazigpt-tweetbot",
+    "version": "1.0.0",
+    "description": "Twitter bot for daily Bazi forecasts",
+    "main": "tweet.js",
+    "scripts": {
+        "start": "node tweet.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "twitter",
+        "bot",
+        "bazi",
+        "astrology"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "puppeteer": "^21.5.2",
+        "twitter-api-v2": "^1.15.2",
+        "dotenv": "^16.3.1"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
