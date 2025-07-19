@@ -33,9 +33,9 @@ function getTodayDate() {
     return today.toLocaleDateString('en-US', options);
 }
 
-// Capture screenshot using Puppeteer
+// Capture screenshot using Puppeteer with macOS-optimized settings
 async function captureScreenshot() {
-    console.log('🚀 Launching Puppeteer...');
+    console.log('🚀 Launching Puppeteer with macOS settings...');
 
     const browser = await puppeteer.launch({
         headless: true, // Use old headless mode for better compatibility
@@ -56,14 +56,14 @@ async function captureScreenshot() {
         console.log(`📄 Navigating to ${SHARE_CARD_URL}...`);
         const page = await browser.newPage();
 
-        // Set user agent to avoid bot detection
+        // Set user agent
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-        // Set viewport for consistent rendering (Twitter-optimized)
+        // Set viewport
         await page.setViewport({
             width: 1200,
             height: 630,
-            deviceScaleFactor: 2 // Higher resolution
+            deviceScaleFactor: 2
         });
 
         // Navigate with simpler settings
@@ -78,8 +78,7 @@ async function captureScreenshot() {
         console.log('📸 Taking screenshot...');
         const screenshot = await page.screenshot({
             type: 'png',
-            fullPage: false,
-            omitBackground: false
+            fullPage: false
         });
 
         console.log('✅ Screenshot captured successfully');
@@ -113,7 +112,7 @@ async function postTweet(screenshot) {
         const mediaId = await client.v1.uploadMedia(screenshot, { mimeType: 'image/png' });
 
         const todayDate = getTodayDate();
-        const tweetText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nCheck your chart → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
+        const tweetText = `🗓️ Daily Bazi Forecast – ${todayDate}\nCheck your chart → ${BAZI_SITE_URL}\n#Bazi #ChineseAstrology #BaziGPT`;
 
         console.log('📝 Posting tweet...');
         const tweet = await client.v2.tweet({
