@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node tweet.js",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "test-card": "node test-share-card.js"
+        "test-card": "node test-share-card.js",
+        "verify": "node verify-setup.js"
     },
     "keywords": [
         "twitter",
