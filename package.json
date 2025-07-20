@@ -7,6 +7,7 @@
         "start": "node run-all.js",
         "tweet": "node tweet.js",
         "telegram": "node telegram.js",
+        "telegram-alt": "node telegram-alt.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "test-card": "node test-share-card.js",
         "test-telegram": "node test-telegram.js",

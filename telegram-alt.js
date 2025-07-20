@@ -31,12 +31,12 @@ function getTodayDate() {
     return today.toLocaleDateString('en-US', options);
 }
 
-// Capture screenshot using Puppeteer
+// Capture screenshot using Puppeteer with alternative approach
 async function captureScreenshot() {
     console.log('🚀 Launching Puppeteer...');
 
     const browser = await puppeteer.launch({
-        headless: true, // Use old headless mode for better compatibility
+        headless: true,
         executablePath: process.platform === 'darwin' ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : undefined,
         args: [
             '--no-sandbox',
@@ -57,43 +57,47 @@ async function captureScreenshot() {
         // Set user agent to avoid bot detection
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-        // Set viewport optimized for Telegram (tight fit to content)
+        // Set viewport with larger height to ensure content fits
         await page.setViewport({
             width: 1200,
-            height: 630, // Reduced to eliminate border
-            deviceScaleFactor: 2 // Higher resolution
+            height: 800, // Larger viewport to ensure content fits
+            deviceScaleFactor: 2
         });
 
         // Enhanced Chinese font loading
         await page.evaluateOnNewDocument(() => {
-            // Force font loading for Chinese characters
             const link = document.createElement('link');
             link.rel = 'stylesheet';
             link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap';
             document.head.appendChild(link);
 
-            // Set comprehensive fallback fonts for Chinese characters
             document.body.style.fontFamily = '"Noto Sans SC", "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "SimHei", "SimSun", "WenQuanYi Micro Hei", sans-serif';
         });
 
         // Wait for fonts to load
         await page.waitForTimeout(2000);
 
-        // Force font loading by rendering Chinese characters
+        // Force font loading
         await page.evaluate(() => {
-            // Create a hidden element with Chinese text to force font loading
             const testElement = document.createElement('div');
             testElement.style.position = 'absolute';
             testElement.style.left = '-9999px';
             testElement.style.fontFamily = '"Noto Sans SC", "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "SimHei", "SimSun", "WenQuanYi Micro Hei", sans-serif';
             testElement.textContent = '天地玄黄宇宙洪荒日月盈昃辰宿列张';
             document.body.appendChild(testElement);
-
-            // Force a repaint
             testElement.offsetHeight;
         });
 
-        // Debug: Check if content fits in viewport
+        // Navigate and wait for content
+        await page.goto(SHARE_CARD_URL, {
+            waitUntil: 'networkidle0',
+            timeout: 30000
+        });
+
+        // Wait for fonts to fully load and render
+        await page.waitForTimeout(5000);
+
+        // Get actual content height
         const contentHeight = await page.evaluate(() => {
             const body = document.body;
             const html = document.documentElement;
@@ -105,34 +109,10 @@ async function captureScreenshot() {
                 html.offsetHeight
             );
         });
-        console.log('📐 Content height:', contentHeight, 'px');
-        console.log('📐 Viewport height:', 630, 'px');
-        console.log('📐 Content fits in viewport:', contentHeight <= 630);
 
-        // Navigate with simpler settings
-        await page.goto(SHARE_CARD_URL, {
-            waitUntil: 'networkidle0',
-            timeout: 30000
-        });
+        console.log('📐 Actual content height:', contentHeight, 'px');
 
-        // Wait for fonts to fully load and render
-        await page.waitForTimeout(5000);
-
-        // Debug: Log page dimensions
-        const dimensions = await page.evaluate(() => {
-            return {
-                viewport: {
-                    width: window.innerWidth,
-                    height: window.innerHeight
-                },
-                document: {
-                    width: document.documentElement.scrollWidth,
-                    height: document.documentElement.scrollHeight
-                }
-            };
-        });
-        console.log('🔍 Page dimensions:', dimensions);
-
+        // Take screenshot with calculated height
         console.log('📸 Taking screenshot...');
         const screenshot = await page.screenshot({
             type: 'png',
@@ -142,11 +122,9 @@ async function captureScreenshot() {
                 x: 0,
                 y: 0,
                 width: 1200,
-                height: 630 // Match viewport height
+                height: Math.min(contentHeight, 630) // Use actual content height but cap at 630
             }
         });
-
-        console.log('📏 Screenshot captured with dimensions: 1200x630');
 
         console.log('✅ Screenshot captured successfully');
         return screenshot;
@@ -174,11 +152,11 @@ async function sendToTelegram(screenshot) {
         const todayDate = getTodayDate();
         const messageText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nCheck your chart → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
 
-        // Send photo with caption (optimized for Telegram)
+        // Send photo with caption
         const result = await bot.sendPhoto(process.env.TELEGRAM_CHANNEL_ID, screenshot, {
             caption: messageText,
             parse_mode: 'HTML',
-            has_spoiler: false // Ensure image displays properly
+            has_spoiler: false
         });
 
         console.log('✅ Message sent to Telegram successfully!');
@@ -195,7 +173,7 @@ async function sendToTelegram(screenshot) {
 // Main function
 async function main() {
     try {
-        console.log('🎯 Starting BaziGPT Telegram Bot...');
+        console.log('🎯 Starting BaziGPT Telegram Bot (Alternative)...');
 
         // Validate environment variables
         validateEnv();
