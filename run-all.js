@@ -2,7 +2,7 @@ require('dotenv').config();
 
 // Import both bot modules
 const { main: tweetMain } = require('./tweet.js');
-const { main: telegramMain } = require('./telegram.js');
+const { main: telegramMain } = require('./telegram-portrait.js');
 
 // Configuration
 const SERVICES = {
