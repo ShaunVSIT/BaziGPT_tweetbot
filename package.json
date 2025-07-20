@@ -8,6 +8,7 @@
         "tweet": "node tweet.js",
         "telegram": "node telegram.js",
         "telegram-alt": "node telegram-alt.js",
+        "telegram-opt": "node telegram-optimized.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "test-card": "node test-share-card.js",
         "test-telegram": "node test-telegram.js",
