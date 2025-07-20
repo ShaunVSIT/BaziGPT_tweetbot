@@ -10,6 +10,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "test-card": "node test-share-card.js",
         "test-telegram": "node test-telegram.js",
+        "test-telegram-screenshot": "node test-telegram-screenshot.js",
         "verify": "node verify-setup.js"
     },
     "keywords": [

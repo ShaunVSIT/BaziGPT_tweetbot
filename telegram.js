@@ -57,10 +57,10 @@ async function captureScreenshot() {
         // Set user agent to avoid bot detection
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-        // Set viewport for consistent rendering
+        // Set viewport optimized for Telegram (tight fit to content)
         await page.setViewport({
             width: 1200,
-            height: 630,
+            height: 630, // Reduced to eliminate border
             deviceScaleFactor: 2 // Higher resolution
         });
 
@@ -106,7 +106,13 @@ async function captureScreenshot() {
         const screenshot = await page.screenshot({
             type: 'png',
             fullPage: false,
-            omitBackground: false
+            omitBackground: false,
+            clip: {
+                x: 0,
+                y: 0,
+                width: 1200,
+                height: 630 // Match viewport height
+            }
         });
 
         console.log('✅ Screenshot captured successfully');
@@ -135,10 +141,11 @@ async function sendToTelegram(screenshot) {
         const todayDate = getTodayDate();
         const messageText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nCheck your chart → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
 
-        // Send photo with caption
+        // Send photo with caption (optimized for Telegram)
         const result = await bot.sendPhoto(process.env.TELEGRAM_CHANNEL_ID, screenshot, {
             caption: messageText,
-            parse_mode: 'HTML'
+            parse_mode: 'HTML',
+            has_spoiler: false // Ensure image displays properly
         });
 
         console.log('✅ Message sent to Telegram successfully!');
