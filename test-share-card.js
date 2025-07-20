@@ -34,6 +34,18 @@ async function testShareCard() {
             deviceScaleFactor: 2
         });
 
+        // Enable Chinese font loading
+        await page.evaluateOnNewDocument(() => {
+            // Force font loading for Chinese characters
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap';
+            document.head.appendChild(link);
+
+            // Set fallback font for Chinese characters
+            document.body.style.fontFamily = '"Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
+        });
+
         // Navigate to the share card URL
         await page.goto('https://bazigpt.xyz/api/daily-share-card-png', {
             waitUntil: 'load',

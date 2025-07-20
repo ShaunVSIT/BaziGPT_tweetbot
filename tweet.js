@@ -66,6 +66,18 @@ async function captureScreenshot() {
             deviceScaleFactor: 2 // Higher resolution
         });
 
+        // Enable Chinese font loading
+        await page.evaluateOnNewDocument(() => {
+            // Force font loading for Chinese characters
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap';
+            document.head.appendChild(link);
+
+            // Set fallback font for Chinese characters
+            document.body.style.fontFamily = '"Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
+        });
+
         // Navigate with simpler settings
         await page.goto(SHARE_CARD_URL, {
             waitUntil: 'load',
