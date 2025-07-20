@@ -3,7 +3,8 @@ const puppeteer = require('puppeteer');
 const TelegramBot = require('node-telegram-bot-api');
 
 // Configuration
-const SHARE_CARD_URL = 'https://bazigpt.xyz/api/daily-share-card';
+const SHARE_CARD_URL = 'https://bazigpt.xyz/api/daily-share-card-portrait';
+const FALLBACK_URL = 'https://bazigpt.xyz/api/daily-share-card'; // Fallback to regular endpoint
 const BAZI_SITE_URL = 'bazigpt.xyz';
 
 // Validate environment variables
@@ -88,26 +89,68 @@ async function captureScreenshot() {
             testElement.offsetHeight;
         });
 
-        // Navigate and wait for content
-        await page.goto(SHARE_CARD_URL, {
-            waitUntil: 'networkidle0',
-            timeout: 30000
-        });
+        // Navigate and wait for content with better error handling
+        console.log('🌐 Navigating to page...');
+        let response;
+
+        try {
+            response = await page.goto(SHARE_CARD_URL, {
+                waitUntil: 'networkidle0',
+                timeout: 30000
+            });
+        } catch (error) {
+            console.log('⚠️  Primary endpoint failed, trying fallback...');
+            response = await page.goto(FALLBACK_URL, {
+                waitUntil: 'networkidle0',
+                timeout: 30000
+            });
+        }
+
+        if (!response.ok()) {
+            throw new Error(`Page failed to load: ${response.status()} ${response.statusText()}`);
+        }
+
+        console.log('✅ Page loaded successfully');
+        console.log('📄 Page title:', await page.title());
 
         // Wait for fonts to fully load and render
         await page.waitForTimeout(5000);
 
-        // Get actual content height
+        // Check if page has content
+        const hasContent = await page.evaluate(() => {
+            return document.body && document.body.innerHTML.length > 0;
+        });
+
+        if (!hasContent) {
+            throw new Error('Page has no content - body is empty');
+        }
+
+        console.log('✅ Page has content');
+
+        // Get actual content height with better error handling
         const contentHeight = await page.evaluate(() => {
             const body = document.body;
             const html = document.documentElement;
-            return Math.max(
-                body.scrollHeight,
-                body.offsetHeight,
-                html.clientHeight,
-                html.scrollHeight,
-                html.offsetHeight
+
+            // Debug: Check if elements exist
+            if (!body || !html) {
+                console.error('❌ Body or HTML element is null');
+                return 1200; // Default height
+            }
+
+            const height = Math.max(
+                body.scrollHeight || 0,
+                body.offsetHeight || 0,
+                html.clientHeight || 0,
+                html.scrollHeight || 0,
+                html.offsetHeight || 0
             );
+
+            console.log('📐 Debug - Body scrollHeight:', body.scrollHeight);
+            console.log('📐 Debug - HTML scrollHeight:', html.scrollHeight);
+            console.log('📐 Debug - Calculated height:', height);
+
+            return height || 1200; // Fallback to 1200 if all are 0
         });
 
         console.log('📐 Actual content height:', contentHeight, 'px');
