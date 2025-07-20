@@ -42,7 +42,6 @@ npm run verify                  # Verify environment setup
 
 ### 📚 **Reference Files**
 - `telegram.js` - Original Telegram script (not used, kept for reference)
-- `telegram-optimized.js` - 16:9 aspect ratio version (not used)
 - `test-telegram-screenshot.js` - Screenshot testing utility
 
 ### 🗑️ **Legacy Files**
