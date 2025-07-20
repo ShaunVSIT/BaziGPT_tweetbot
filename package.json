@@ -8,10 +8,14 @@
         "tweet": "node tweet.js",
         "telegram": "node telegram.js",
         "telegram-alt": "node telegram-alt.js",
+        "telegram-portrait": "node telegram-portrait.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "test-card": "node test-share-card.js",
         "test-telegram": "node test-telegram.js",
         "test-telegram-screenshot": "node test-telegram-screenshot.js",
+        "test-portrait-local": "node test-portrait-local.js",
+        "test-portrait-production": "node test-portrait-production.js",
+        "test-landscape-in-portrait": "node test-landscape-in-portrait.js",
         "verify": "node verify-setup.js"
     },
     "keywords": [

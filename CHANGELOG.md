@@ -1,128 +1,156 @@
-# BaziGPT Bot - Change Log
+# BaziGPT Tweetbot - Changelog
 
-## 🎯 Current Active Files
+## 📋 Current Setup (Latest)
 
-### **Core Scripts (In Use)**
-- **`tweet.js`** - Twitter bot (scheduled daily)
-- **`telegram-alt.js`** - Telegram bot (scheduled daily) - *working version*
-- **`run-all.js`** - Unified runner for both platforms (manual trigger)
+### 🎯 **Active Production Files**
 
-### **Workflows (In Use)**
-- **`.github/workflows/tweet-daily.yml`** - Twitter scheduled workflow
-- **`.github/workflows/telegram-daily.yml`** - Telegram scheduled workflow (calls `telegram-alt.js`)
-- **`.github/workflows/daily-post.yml`** - Manual unified workflow (no schedule)
+#### **Core Bot Scripts:**
+- **`tweet.js`** - Twitter bot (landscape layout, 1200x630)
+- **`telegram-alt.js`** - Telegram bot (landscape layout, 1200x630) - **CURRENTLY ACTIVE**
+- **`telegram-portrait.js`** - Telegram bot (portrait layout, 800x1200) - **NEW PORTRAIT VERSION**
 
-## 🔧 Commands
+#### **Unified Runner:**
+- **`run-all.js`** - Runs both Twitter and Telegram bots conditionally
 
-### **Production Commands**
+#### **Test Scripts:**
+- **`test-share-card.js`** - Test landscape share card
+- **`test-telegram.js`** - Test Telegram bot functionality
+- **`test-telegram-screenshot.js`** - Test Telegram screenshot dimensions
+- **`test-portrait-production.js`** - Test portrait layout with production endpoint
+- **`test-portrait-local.js`** - Test portrait layout with local endpoint
+- **`test-landscape-in-portrait.js`** - Test landscape layout in portrait viewport
+
+### 🚀 **GitHub Actions Workflows**
+
+#### **Scheduled Workflows:**
+- **`.github/workflows/tweet-daily.yml`** - Daily Twitter posts at midnight UTC
+- **`.github/workflows/telegram-daily.yml`** - Daily Telegram posts at midnight UTC (uses `telegram-portrait.js`)
+
+#### **Manual Workflows:**
+- **`.github/workflows/daily-post.yml`** - Manual trigger to run both Twitter and Telegram
+
+### 📦 **NPM Scripts**
+
+#### **Production Scripts:**
 ```bash
-npm start          # Runs both Twitter + Telegram
-npm run tweet      # Twitter only
-npm run telegram   # Telegram only (calls telegram-alt.js)
+npm start              # Run both Twitter and Telegram
+npm run tweet          # Run Twitter bot only
+npm run telegram       # Run original Telegram bot (landscape)
+npm run telegram-alt   # Run alternative Telegram bot (landscape)
+npm run telegram-portrait # Run portrait Telegram bot (NEW)
 ```
 
-### **Testing Commands**
+#### **Test Scripts:**
 ```bash
-npm run test-telegram           # Test Telegram functionality
-npm run test-telegram-screenshot # Test screenshot dimensions
-npm run test-card               # Test screenshot capture
-npm run verify                  # Verify environment setup
+npm run test-card              # Test landscape share card
+npm run test-telegram          # Test Telegram functionality
+npm run test-telegram-screenshot # Test Telegram screenshot
+npm run test-portrait-production # Test portrait with production
+npm run test-portrait-local    # Test portrait with local endpoint
+npm run test-landscape-in-portrait # Test landscape in portrait viewport
+npm run verify                 # Verify environment setup
 ```
 
-## 📁 File Status
+### 🔧 **Environment Variables**
 
-### ✅ **Active Files**
-- `tweet.js` - Twitter bot (working)
-- `telegram-alt.js` - Telegram bot (working, used by workflow)
-- `run-all.js` - Unified runner (working)
-- `package.json` - Dependencies and scripts
-- `.github/workflows/tweet-daily.yml` - Twitter workflow
-- `.github/workflows/telegram-daily.yml` - Telegram workflow
-- `.github/workflows/daily-post.yml` - Manual unified workflow
-
-### 📚 **Reference Files**
-- `telegram.js` - Original Telegram script (not used, kept for reference)
-- `test-telegram-screenshot.js` - Screenshot testing utility
-
-### 🗑️ **Legacy Files**
-- `tweet-fallback.js` - Old fallback script
-- `simple-test.js` - Old test script
-- `test-endpoint.js` - Old endpoint test
-- `test-simple.js` - Old simple test
-
-## 🔑 Environment Variables
-
-### **Required**
+#### **Required:**
 ```bash
-# Twitter
-TWITTER_API_KEY
-TWITTER_API_SECRET  
-TWITTER_ACCESS_TOKEN
-TWITTER_ACCESS_SECRET
+# Twitter API v2
+TWITTER_API_KEY=your_twitter_api_key
+TWITTER_API_SECRET=your_twitter_api_secret
+TWITTER_ACCESS_TOKEN=your_twitter_access_token
+TWITTER_ACCESS_TOKEN_SECRET=your_twitter_access_token_secret
 
-# Telegram
-TELEGRAM_BOT_TOKEN
-TELEGRAM_CHANNEL_ID
+# Telegram Bot
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHANNEL_ID=@your_channel_username
 ```
 
-### **Optional**
+### 🌐 **Endpoints**
+
+#### **Production:**
+- **Landscape:** `https://bazigpt.xyz/api/daily-share-card`
+- **PNG:** `https://bazigpt.xyz/api/daily-share-card-png`
+
+#### **Local Development:**
+- **Portrait:** `http://localhost:3001/api/daily-share-card-portrait`
+
+## 📝 **Recent Changes**
+
+### **Latest Updates:**
+- ✅ **Updated all Puppeteer scripts** to use `headless: "new"` (eliminates deprecation warnings)
+- ✅ **Created portrait Telegram bot** (`telegram-portrait.js`) for mobile-optimized posts
+- ✅ **Updated GitHub Actions workflow** to use portrait layout for Telegram
+- ✅ **Added comprehensive test scripts** for portrait layout testing
+- ✅ **Fixed domain references** from `bazigpt.com` to `bazigpt.xyz`
+- ✅ **Improved error handling** in test scripts with proper browser cleanup
+
+### **Portrait Layout Features:**
+- **Viewport:** 800x1200 (portrait orientation)
+- **Optimized for mobile** Telegram users
+- **Dynamic height calculation** to fit content properly
+- **Enhanced Chinese font loading** for proper character rendering
+
+### **Test Script Purposes:**
+
+#### **Production Testing:**
+- **`test-portrait-production.js`** - Tests portrait layout with production endpoint
+- **`test-landscape-in-portrait.js`** - Shows what landscape layout looks like in portrait viewport
+
+#### **Local Development:**
+- **`test-portrait-local.js`** - Tests portrait layout with local development endpoint
+
+#### **Functionality Testing:**
+- **`test-telegram.js`** - Tests full Telegram bot functionality
+- **`test-telegram-screenshot.js`** - Tests screenshot capture and dimensions
+
+## 🔍 **Troubleshooting**
+
+### **Common Issues:**
+
+#### **Chinese Characters Not Rendering:**
+- ✅ **Fixed:** All scripts now include enhanced font loading
+- ✅ **Fixed:** GitHub Actions installs Noto CJK fonts
+
+#### **Image Cutoff Issues:**
+- ✅ **Fixed:** Dynamic height calculation in portrait scripts
+- ✅ **Fixed:** Proper viewport sizing for different orientations
+
+#### **Puppeteer Deprecation Warnings:**
+- ✅ **Fixed:** All scripts use `headless: "new"`
+
+#### **Test Scripts Not Exiting:**
+- ✅ **Fixed:** Added proper `browser.close()` in finally blocks
+
+### **Debugging Commands:**
 ```bash
-ENABLE_TWITTER=true    # Default: true
-ENABLE_TELEGRAM=true   # Default: true
+# Test current production portrait layout
+npm run test-portrait-production
+
+# Test landscape layout in portrait viewport
+npm run test-landscape-in-portrait
+
+# Verify environment setup
+npm run verify
 ```
 
-## 🚀 Workflow Schedule
+## 🎯 **Current Status**
 
-- **Twitter**: Daily at midnight UTC (automatic)
-- **Telegram**: Daily at midnight UTC (automatic)  
-- **Unified**: Manual trigger only (no schedule)
+### **Active Workflows:**
+- ✅ **Twitter:** Daily posts using landscape layout
+- ✅ **Telegram:** Daily posts using portrait layout (mobile-optimized)
 
-## 📐 Image Dimensions
+### **Test Coverage:**
+- ✅ **Landscape testing** - `test-share-card.js`
+- ✅ **Portrait testing** - `test-portrait-production.js`
+- ✅ **Telegram functionality** - `test-telegram.js`
+- ✅ **Screenshot validation** - `test-telegram-screenshot.js`
 
-- **Twitter**: `1200x630` (standard)
-- **Telegram**: Dynamic height based on content, capped at 630px (from `telegram-alt.js`)
+### **Next Steps:**
+- 🎯 **Deploy portrait endpoint** to production
+- 🎯 **Test portrait layout** with real Telegram posts
+- 🎯 **Monitor performance** and user feedback
 
-## ✨ Key Features
+---
 
-✅ **Chinese character rendering** - Fixed with font installation  
-✅ **Multi-platform support** - Twitter + Telegram  
-✅ **Independent workflows** - No duplicate posts  
-✅ **Error handling** - Each service runs independently  
-✅ **Manual override** - Can run both together when needed  
-✅ **Font optimization** - Noto CJK fonts installed in GitHub Actions  
-
-## 📝 Important Notes
-
-- **`telegram-alt.js`** is the working version because it uses dynamic height calculation
-- **`telegram.js`** was kept for reference but has fixed dimensions that caused cutoff
-- **Font installation** in GitHub Actions fixed Chinese character rendering
-- **Separate workflows** prevent duplicate posts while allowing independent operation
-
-## 🔄 Recent Changes
-
-### **Latest Updates**
-- ✅ Fixed Chinese character rendering with font installation
-- ✅ Added Telegram integration with dynamic height calculation
-- ✅ Created unified runner for multi-platform posting
-- ✅ Separated workflows to prevent duplicate posts
-- ✅ Added comprehensive testing scripts
-
-### **Known Issues**
-- None currently - all features working as expected
-
-## 🛠️ Troubleshooting
-
-### **If Telegram images are cut off:**
-- Use `telegram-alt.js` (already configured)
-- Check font installation in GitHub Actions
-- Verify channel permissions
-
-### **If Chinese characters don't render:**
-- Ensure Noto CJK fonts are installed
-- Check font loading in Puppeteer
-- Verify webapp font configuration
-
-### **If workflows fail:**
-- Check environment variables
-- Verify API credentials
-- Check GitHub Actions logs for specific errors 
+*Last updated: December 2024* 

@@ -38,7 +38,7 @@ async function captureScreenshot() {
     console.log('🚀 Launching Puppeteer...');
 
     const browser = await puppeteer.launch({
-        headless: true, // Use old headless mode for better compatibility
+        headless: "new", // Use new headless mode
         executablePath: process.platform === 'darwin' ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : undefined,
         args: [
             '--no-sandbox',
