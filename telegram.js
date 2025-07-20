@@ -1,6 +1,6 @@
 require('dotenv').config();
 const puppeteer = require('puppeteer');
-const { TwitterApi } = require('twitter-api-v2');
+const TelegramBot = require('node-telegram-bot-api');
 
 // Configuration
 const SHARE_CARD_URL = 'https://bazigpt.xyz/api/daily-share-card-png';
@@ -9,10 +9,8 @@ const BAZI_SITE_URL = 'bazigpt.xyz';
 // Validate environment variables
 function validateEnv() {
     const required = [
-        'TWITTER_API_KEY',
-        'TWITTER_API_SECRET',
-        'TWITTER_ACCESS_TOKEN',
-        'TWITTER_ACCESS_SECRET'
+        'TELEGRAM_BOT_TOKEN',
+        'TELEGRAM_CHANNEL_ID'
     ];
 
     const missing = required.filter(key => !process.env[key]);
@@ -59,7 +57,7 @@ async function captureScreenshot() {
         // Set user agent to avoid bot detection
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-        // Set viewport for consistent rendering (Twitter-optimized)
+        // Set viewport for consistent rendering
         await page.setViewport({
             width: 1200,
             height: 630,
@@ -120,43 +118,36 @@ async function captureScreenshot() {
     }
 }
 
-// Initialize Twitter API client
-function createTwitterClient() {
-    const client = new TwitterApi({
-        appKey: process.env.TWITTER_API_KEY,
-        appSecret: process.env.TWITTER_API_SECRET,
-        accessToken: process.env.TWITTER_ACCESS_TOKEN,
-        accessSecret: process.env.TWITTER_ACCESS_SECRET,
-    });
-
-    return client;
+// Initialize Telegram Bot
+function createTelegramBot() {
+    const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: false });
+    return bot;
 }
 
-// Upload media and post tweet
-async function postTweet(screenshot) {
-    console.log('🐦 Initializing Twitter client...');
-    const client = createTwitterClient();
+// Send message to Telegram channel
+async function sendToTelegram(screenshot) {
+    console.log('📱 Initializing Telegram bot...');
+    const bot = createTelegramBot();
 
     try {
-        console.log('📤 Uploading media to Twitter...');
-        const mediaId = await client.v1.uploadMedia(screenshot, { mimeType: 'image/png' });
+        console.log('📤 Sending message to Telegram channel...');
 
         const todayDate = getTodayDate();
-        const tweetText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nCheck your chart → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
+        const messageText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nCheck your chart → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
 
-        console.log('📝 Posting tweet...');
-        const tweet = await client.v2.tweet({
-            text: tweetText,
-            media: { media_ids: [mediaId] }
+        // Send photo with caption
+        const result = await bot.sendPhoto(process.env.TELEGRAM_CHANNEL_ID, screenshot, {
+            caption: messageText,
+            parse_mode: 'HTML'
         });
 
-        console.log('✅ Tweet posted successfully!');
-        console.log(`🔗 Tweet URL: https://twitter.com/user/status/${tweet.data.id}`);
+        console.log('✅ Message sent to Telegram successfully!');
+        console.log(`📱 Message ID: ${result.message_id}`);
 
-        return tweet;
+        return result;
 
     } catch (error) {
-        console.error('❌ Error posting tweet:', error.message);
+        console.error('❌ Error sending to Telegram:', error.message);
         throw error;
     }
 }
@@ -164,7 +155,7 @@ async function postTweet(screenshot) {
 // Main function
 async function main() {
     try {
-        console.log('🎯 Starting BaziGPT Twitter Bot...');
+        console.log('🎯 Starting BaziGPT Telegram Bot...');
 
         // Validate environment variables
         validateEnv();
@@ -173,10 +164,10 @@ async function main() {
         // Capture screenshot
         const screenshot = await captureScreenshot();
 
-        // Post tweet
-        await postTweet(screenshot);
+        // Send to Telegram
+        await sendToTelegram(screenshot);
 
-        console.log('🎉 Daily Bazi forecast tweeted successfully!');
+        console.log('🎉 Daily Bazi forecast sent to Telegram successfully!');
 
     } catch (error) {
         console.error('💥 Error in main process:', error.message);
@@ -189,4 +180,4 @@ if (require.main === module) {
     main();
 }
 
-module.exports = { main, captureScreenshot, postTweet }; 
+module.exports = { main, captureScreenshot, sendToTelegram }; 

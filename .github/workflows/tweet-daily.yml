@@ -23,6 +23,12 @@ jobs:
     - name: 📦 Install dependencies
       run: npm install
       
+    - name: 🔤 Install Chinese fonts
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y fonts-noto-cjk fonts-noto-cjk-extra
+        sudo fc-cache -fv
+        
     - name: 🔍 Validate environment variables
       run: |
         echo "Checking required Twitter API credentials..."
@@ -38,7 +44,7 @@ jobs:
         TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
         
     - name: 🚀 Capture screenshot and post tweet
-      run: npm start
+      run: npm run tweet
       env:
         TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
         TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}

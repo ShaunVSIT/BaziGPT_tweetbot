@@ -4,9 +4,12 @@
     "description": "Twitter bot for daily Bazi forecasts",
     "main": "tweet.js",
     "scripts": {
-        "start": "node tweet.js",
+        "start": "node run-all.js",
+        "tweet": "node tweet.js",
+        "telegram": "node telegram.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "test-card": "node test-share-card.js",
+        "test-telegram": "node test-telegram.js",
         "verify": "node verify-setup.js"
     },
     "keywords": [
@@ -20,6 +23,7 @@
     "dependencies": {
         "puppeteer": "^21.5.2",
         "twitter-api-v2": "^1.15.2",
+        "node-telegram-bot-api": "^0.64.0",
         "dotenv": "^16.3.1"
     },
     "engines": {
