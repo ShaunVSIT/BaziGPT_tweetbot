@@ -1,0 +1,195 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Daily Bazi Forecast - Portrait</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            
+            body {
+                margin: 0;
+                padding: 0;
+                width: 800px;
+                height: 1200px;
+                background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
+                font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Noto Sans CJK SC", "Source Han Sans SC", Arial, sans-serif;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                color: white;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .container {
+                text-align: center;
+                max-width: 700px;
+                padding: 30px 25px;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 20px;
+                position: relative;
+                z-index: 2;
+            }
+            
+            .header {
+                margin-top: 15px;
+                margin-bottom: 15px;
+                flex-shrink: 0;
+            }
+            
+            .title {
+                font-size: 48px;
+                font-weight: bold;
+                margin-bottom: 12px;
+                color: #ffffff;
+                line-height: 1.1;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            }
+            
+            .date {
+                font-size: 24px;
+                color: #ff9800;
+                margin-bottom: 8px;
+                font-weight: 500;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            }
+            
+            .pillar {
+                font-size: 32px;
+                font-weight: bold;
+                margin-bottom: 15px;
+                color: #ffffff;
+                line-height: 1.2;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                padding: 12px 20px;
+                background: rgba(255, 152, 0, 0.1);
+                border: 2px solid rgba(255, 152, 0, 0.3);
+                border-radius: 10px;
+                display: inline-block;
+            }
+            
+            .forecast {
+                font-size: 18px;
+                line-height: 1.5;
+                color: #e0e0e0;
+                text-align: justify;
+                max-width: 650px;
+                margin: 0 auto;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: 20px;
+                padding: 25px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                min-height: 0;
+                overflow: hidden;
+            }
+            
+            .forecast p {
+                margin: 0;
+                padding: 0;
+                text-indent: 0;
+                text-align: justify;
+                line-height: 1.6;
+                flex: 1;
+                display: flex;
+                align-items: center;
+            }
+            
+            .forecast p:first-child {
+                margin-top: 0;
+            }
+            
+            .forecast p:last-child {
+                margin-bottom: 0;
+            }
+            
+            .forecast strong {
+                color: #ff9800;
+                font-weight: 600;
+            }
+            
+            .forecast em {
+                color: #ffffff;
+                font-style: italic;
+            }
+            
+            .footer {
+                font-size: 16px;
+                color: #888888;
+                margin-top: 15px;
+                margin-bottom: 20px;
+                font-weight: 500;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+                flex-shrink: 0;
+            }
+            
+            .decorative {
+                position: absolute;
+                border: 2px solid #ff9800;
+                border-radius: 50%;
+                opacity: 0.3;
+                z-index: 1;
+            }
+            
+            .decorative.top-left {
+                top: 60px;
+                left: 50px;
+                width: 100px;
+                height: 100px;
+            }
+            
+            .decorative.bottom-right {
+                bottom: 60px;
+                right: 50px;
+                width: 120px;
+                height: 120px;
+                opacity: 0.2;
+            }
+            
+            .decorative.top-right {
+                top: 80px;
+                right: 70px;
+                width: 70px;
+                height: 70px;
+                opacity: 0.15;
+            }
+            
+            .decorative.bottom-left {
+                bottom: 80px;
+                left: 70px;
+                width: 90px;
+                height: 90px;
+                opacity: 0.15;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="decorative top-left"></div>
+        <div class="decorative top-right"></div>
+        <div class="decorative bottom-left"></div>
+        <div class="decorative bottom-right"></div>
+        <div class="container">
+            <div class="header">
+                <div class="title">Daily Bazi Forecast</div>
+                <div class="date">Monday, July 21, 2025</div>
+                <div class="pillar">Yang Metal (庚) over Chen (辰)</div>
+            </div>
+            <div class="forecast">
+                <p>Today’s energy features Yang Metal (庚) over the Earthly Branch of Chen (辰), creating a dynamic interplay between the strength of metal and the nurturing, grounded qualities of the dragon. This combination signifies a day ripe for decisive action and clarity, especially in matters of career or personal projects. Those with strong Earth or Water elements in their Bazi charts may find this energy particularly beneficial, as Metal can help refine and solidify their intentions.</p><p>However, individuals with excessive Fire elements may feel a sense of conflict, as Metal can cut through Fire, potentially leading to a day of frustration or conflict. It is advisable to focus on practical tasks, avoid impulsive decisions, and cultivate patience in interactions. Engage in activities that require focus and determination, while steering clear of confrontations or heated discussions.</p><p>In terms of auspicious themes, this day favors strategic planning and the implementation of long-term goals. </p><p>"Let the steady flow of Water guide your words today."</p>
+            </div>
+            <div class="footer">BaziGPT.xyz</div>
+        </div>
+    </body>
+    </html>
+    

@@ -2,7 +2,7 @@ require('dotenv').config();
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-// Configuration
+// Configuration - use local development endpoint
 const LOCAL_PORTRAIT_URL = 'http://localhost:3001/api/daily-share-card-portrait';
 
 async function capturePortraitScreenshot() {
@@ -118,7 +118,7 @@ async function capturePortraitScreenshot() {
         });
 
         // Save screenshot for preview
-        const filename = `test-outputs/portrait-preview-${Date.now()}.png`;
+        const filename = `test-outputs/portrait-local-${Date.now()}.png`;
         if (!fs.existsSync('test-outputs')) {
             fs.mkdirSync('test-outputs');
         }
@@ -131,6 +131,7 @@ async function capturePortraitScreenshot() {
 
         console.log('✅ Test completed successfully!');
         console.log('📁 Check the saved image in test-outputs/ folder');
+        console.log('💡 The text bounding box should now sit above the bottom circular graphic');
 
     } catch (error) {
         console.error('❌ Error capturing screenshot:', error.message);
@@ -141,7 +142,4 @@ async function capturePortraitScreenshot() {
 }
 
 // Run the test
-capturePortraitScreenshot().catch(error => {
-    console.error('💥 Fatal error:', error.message);
-    process.exit(1);
-}); 
+capturePortraitScreenshot().catch(console.error); 

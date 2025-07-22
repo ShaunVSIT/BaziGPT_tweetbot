@@ -20,7 +20,7 @@ async function verifySetup() {
     console.log('\n2️⃣ Testing share card endpoint...');
     try {
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: "new",
             args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
         });
 
