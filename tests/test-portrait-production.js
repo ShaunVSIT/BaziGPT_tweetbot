@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 // Configuration - use production endpoint
-const PRODUCTION_URL = 'https://bazigpt.xyz/api/daily-share-card-portrait';
+const PRODUCTION_URL = 'https://bazigpt.io/api/daily-share-card-portrait';
 
 async function capturePortraitScreenshot() {
     console.log('🚀 Launching Puppeteer...');

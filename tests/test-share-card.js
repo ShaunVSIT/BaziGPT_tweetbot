@@ -47,7 +47,7 @@ async function testShareCard() {
         });
 
         // Navigate to the share card URL
-        await page.goto('https://bazigpt.xyz/api/daily-share-card-png', {
+        await page.goto('https://bazigpt.io/api/daily-share-card-png', {
             waitUntil: 'load',
             timeout: 30000
         });

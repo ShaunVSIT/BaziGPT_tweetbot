@@ -3,9 +3,9 @@ const puppeteer = require('puppeteer');
 const TelegramBot = require('node-telegram-bot-api');
 
 // Configuration
-const SHARE_CARD_URL = 'https://bazigpt.xyz/api/daily-share-card-portrait';
-const FALLBACK_URL = 'https://bazigpt.xyz/api/daily-share-card'; // Fallback to regular endpoint
-const BAZI_SITE_URL = 'bazigpt.xyz';
+const SHARE_CARD_URL = 'https://bazigpt.io/api/daily-share-card-portrait';
+const FALLBACK_URL = 'https://bazigpt.io/api/daily-share-card'; // Fallback to regular endpoint
+const BAZI_SITE_URL = 'bazigpt.io';
 
 // Validate environment variables
 function validateEnv() {

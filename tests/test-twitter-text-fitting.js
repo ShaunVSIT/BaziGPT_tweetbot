@@ -64,7 +64,7 @@ async function testTwitterTextFitting() {
         });
 
         // Navigate with simpler settings
-        await page.goto('https://bazigpt.xyz/api/daily-share-card-png', {
+        await page.goto('https://bazigpt.io/api/daily-share-card-png', {
             waitUntil: 'networkidle0',
             timeout: 30000
         });

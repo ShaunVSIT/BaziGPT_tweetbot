@@ -25,7 +25,7 @@ async function verifySetup() {
         });
 
         const page = await browser.newPage();
-        await page.goto('https://bazigpt.xyz/api/daily-share-card-png', { timeout: 10000 });
+        await page.goto('https://bazigpt.io/api/daily-share-card-png', { timeout: 10000 });
 
         const title = await page.title();
         console.log(`✅ Share card loads successfully (Title: ${title})`);

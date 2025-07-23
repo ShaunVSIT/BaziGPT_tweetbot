@@ -1,6 +1,6 @@
 # BaziGPT Twitter Bot
 
-A Twitter bot that automatically posts daily Bazi forecasts with share cards from [BaziGPT](https://bazigpt.xyz/daily).
+A Twitter bot that automatically posts daily Bazi forecasts with share cards from [BaziGPT](https://bazigpt.io/daily).
 
 ## Features
 
@@ -77,7 +77,7 @@ You can manually trigger the workflow:
 
 ## How It Works
 
-1. **Screenshot Capture**: Puppeteer loads `https://bazigpt.xyz/api/daily-share-card-png` and captures a PNG
+1. **Screenshot Capture**: Puppeteer loads `https://bazigpt.io/api/daily-share-card-png` and captures a PNG
 2. **Twitter Upload**: The PNG is uploaded to Twitter as media
 3. **Tweet Posting**: A formatted tweet is posted with the image and today's date
 4. **Automation**: GitHub Actions runs this process daily at midnight UTC
@@ -86,7 +86,7 @@ You can manually trigger the workflow:
 
 ```
 🗓️ Daily Bazi Forecast – July 20, 2025
-Check your chart → bazigpt.xyz
+Check your chart → bazigpt.io
 #Bazi #ChineseAstrology #BaziGPT
 ```
 

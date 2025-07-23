@@ -69,8 +69,8 @@ TELEGRAM_CHANNEL_ID=@your_channel_username
 ### 🌐 **Endpoints**
 
 #### **Production:**
-- **Landscape:** `https://bazigpt.xyz/api/daily-share-card`
-- **PNG:** `https://bazigpt.xyz/api/daily-share-card-png`
+- **Landscape:** `https://bazigpt.io/api/daily-share-card`
+- **PNG:** `https://bazigpt.io/api/daily-share-card-png`
 
 #### **Local Development:**
 - **Portrait:** `http://localhost:3001/api/daily-share-card-portrait`
@@ -82,7 +82,7 @@ TELEGRAM_CHANNEL_ID=@your_channel_username
 - ✅ **Created portrait Telegram bot** (`telegram-portrait.js`) for mobile-optimized posts
 - ✅ **Updated GitHub Actions workflow** to use portrait layout for Telegram
 - ✅ **Added comprehensive test scripts** for portrait layout testing
-- ✅ **Fixed domain references** from `bazigpt.com` to `bazigpt.xyz`
+- ✅ **Fixed domain references** from `bazigpt.com` to `bazigpt.io`
 - ✅ **Improved error handling** in test scripts with proper browser cleanup
 
 ### **Portrait Layout Features:**

@@ -21,7 +21,7 @@ async function testEndpoint() {
         console.log('📄 Navigating to endpoint...');
 
         // Try with different options
-        const response = await page.goto('https://bazigpt.xyz/api/daily-share-card-png', {
+        const response = await page.goto('https://bazigpt.io/api/daily-share-card-png', {
             waitUntil: 'networkidle0',
             timeout: 30000
         });
