@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
-async function testShareCard() {
-    console.log('🧪 Testing share card formatting...');
+async function testTwitterTextFitting() {
+    console.log('🧪 Testing Twitter text fitting...');
 
     const browser = await puppeteer.launch({
         headless: "new",
@@ -24,17 +24,17 @@ async function testShareCard() {
         console.log('📄 Loading share card from endpoint...');
         const page = await browser.newPage();
 
-        // Set user agent
+        // Set user agent to avoid bot detection
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-        // Set viewport for consistent rendering
+        // Set viewport for consistent rendering (Twitter-optimized)
         await page.setViewport({
             width: 1200,
             height: 630,
-            deviceScaleFactor: 2
+            deviceScaleFactor: 2 // Higher resolution
         });
 
-        // Enable Chinese font loading
+        // Enhanced Chinese font loading
         await page.evaluateOnNewDocument(() => {
             // Force font loading for Chinese characters
             const link = document.createElement('link');
@@ -42,18 +42,35 @@ async function testShareCard() {
             link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap';
             document.head.appendChild(link);
 
-            // Set fallback font for Chinese characters
-            document.body.style.fontFamily = '"Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
+            // Set comprehensive fallback fonts for Chinese characters
+            document.body.style.fontFamily = '"Noto Sans SC", "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "SimHei", "SimSun", "WenQuanYi Micro Hei", sans-serif';
         });
 
-        // Navigate to the share card URL
+        // Wait for fonts to load
+        await page.waitForTimeout(2000);
+
+        // Force font loading by rendering Chinese characters
+        await page.evaluate(() => {
+            // Create a hidden element with Chinese text to force font loading
+            const testElement = document.createElement('div');
+            testElement.style.position = 'absolute';
+            testElement.style.left = '-9999px';
+            testElement.style.fontFamily = '"Noto Sans SC", "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "SimHei", "SimSun", "WenQuanYi Micro Hei", sans-serif';
+            testElement.textContent = '天地玄黄宇宙洪荒日月盈昃辰宿列张';
+            document.body.appendChild(testElement);
+
+            // Force a repaint
+            testElement.offsetHeight;
+        });
+
+        // Navigate with simpler settings
         await page.goto('https://bazigpt.xyz/api/daily-share-card-png', {
-            waitUntil: 'load',
+            waitUntil: 'networkidle0',
             timeout: 30000
         });
 
-        // Wait for rendering
-        await page.waitForTimeout(3000);
+        // Wait for fonts to fully load and render
+        await page.waitForTimeout(5000);
 
         // Add dynamic text fitting to ensure no text is cut off
         await page.evaluate(() => {
@@ -119,6 +136,9 @@ async function testShareCard() {
                 }
 
                 console.log(`Text fitting complete: Font size: ${fontSize}px, Available height: ${availableHeight}px`);
+
+                // Log the final text content to verify it's not cut off
+                console.log('Final text content:', forecast.textContent.substring(0, 100) + '...');
             }
 
             // Run text fitting after a short delay to ensure layout is complete
@@ -140,36 +160,56 @@ async function testShareCard() {
 
         // Generate filename with timestamp
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const filename = `share-card-${timestamp}.png`;
+        const filename = `twitter-text-fitting-${timestamp}.png`;
         const filepath = path.join(outputDir, filename);
 
         console.log('📸 Taking screenshot...');
         await page.screenshot({
             path: filepath,
             type: 'png',
-            fullPage: false
+            fullPage: false,
+            omitBackground: false
         });
 
         console.log(`✅ Screenshot saved to: ${filepath}`);
 
         // Also save the HTML for inspection
         const htmlContent = await page.content();
-        const htmlFilename = `share-card-${timestamp}.html`;
+        const htmlFilename = `twitter-text-fitting-${timestamp}.html`;
         const htmlFilepath = path.join(outputDir, htmlFilename);
         fs.writeFileSync(htmlFilepath, htmlContent);
         console.log(`📄 HTML saved to: ${htmlFilepath}`);
 
-        // Get page title and dimensions
-        const title = await page.title();
-        const dimensions = await page.evaluate(() => ({
-            width: document.documentElement.scrollWidth,
-            height: document.documentElement.scrollHeight
-        }));
+        // Get text fitting results
+        const textFittingResults = await page.evaluate(() => {
+            const forecast = document.querySelector('.forecast');
+            if (!forecast) return null;
 
-        console.log('📊 Page info:');
-        console.log(`   Title: ${title}`);
-        console.log(`   Dimensions: ${dimensions.width}x${dimensions.height}`);
-        console.log(`   Viewport: 1200x630 (2x scale)`);
+            return {
+                fontSize: parseFloat(getComputedStyle(forecast).fontSize),
+                lineHeight: parseFloat(getComputedStyle(forecast).lineHeight),
+                maxHeight: parseFloat(getComputedStyle(forecast).maxHeight),
+                scrollHeight: forecast.scrollHeight,
+                clientHeight: forecast.clientHeight,
+                textLength: forecast.textContent.length,
+                isOverflowing: forecast.scrollHeight > forecast.clientHeight
+            };
+        });
+
+        console.log('📊 Text fitting results:');
+        console.log(`   Font size: ${textFittingResults.fontSize}px`);
+        console.log(`   Line height: ${textFittingResults.lineHeight}`);
+        console.log(`   Max height: ${textFittingResults.maxHeight}px`);
+        console.log(`   Scroll height: ${textFittingResults.scrollHeight}px`);
+        console.log(`   Client height: ${textFittingResults.clientHeight}px`);
+        console.log(`   Text length: ${textFittingResults.textLength} characters`);
+        console.log(`   Is overflowing: ${textFittingResults.isOverflowing}`);
+
+        if (textFittingResults.isOverflowing) {
+            console.log('⚠️  Warning: Text is still overflowing!');
+        } else {
+            console.log('✅ Text fitting successful - no overflow detected');
+        }
 
     } catch (error) {
         console.error('❌ Error:', error.message);
@@ -180,4 +220,4 @@ async function testShareCard() {
 }
 
 // Run the test
-testShareCard(); 
+testTwitterTextFitting(); 

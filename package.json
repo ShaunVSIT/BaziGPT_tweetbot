@@ -21,6 +21,7 @@
         "test-endpoint": "node tests/test-endpoint.js",
         "test-simple": "node tests/test-simple.js",
         "simple-test": "node tests/simple-test.js",
+        "test-twitter-text-fitting": "node tests/test-twitter-text-fitting.js",
         "verify": "node verify-setup.js"
     },
     "keywords": [

@@ -104,6 +104,83 @@ async function captureScreenshot() {
         // Wait for fonts to fully load and render
         await page.waitForTimeout(5000);
 
+        // Add dynamic text fitting to ensure no text is cut off
+        await page.evaluate(() => {
+            // Function to ensure text fits within available space
+            function ensureTextFits() {
+                const forecast = document.querySelector('.forecast');
+                const container = document.querySelector('.container');
+                const title = document.querySelector('.title');
+                const date = document.querySelector('.date');
+                const pillar = document.querySelector('.pillar');
+                const footer = document.querySelector('.footer');
+
+                if (!forecast || !container) return;
+
+                // Remove any existing line-clamp restrictions
+                forecast.style.webkitLineClamp = 'none';
+                forecast.style.maxHeight = 'none';
+                forecast.style.overflow = 'visible';
+
+                // Calculate available space
+                const containerHeight = 630; // Fixed height
+                const titleHeight = title ? title.offsetHeight : 0;
+                const dateHeight = date ? date.offsetHeight : 0;
+                const pillarHeight = pillar ? pillar.offsetHeight : 0;
+                const footerHeight = footer ? footer.offsetHeight : 0;
+                const margins = 60; // Account for padding and margins
+
+                const availableHeight = containerHeight - titleHeight - dateHeight - pillarHeight - footerHeight - margins;
+
+                // Set forecast to use available space
+                forecast.style.maxHeight = `${availableHeight}px`;
+                forecast.style.overflow = 'hidden';
+
+                // If text is still overflowing, reduce font size
+                let fontSize = 16;
+                const originalFontSize = 16;
+
+                while (forecast.scrollHeight > forecast.clientHeight && fontSize > 12) {
+                    fontSize -= 0.5;
+                    forecast.style.fontSize = `${fontSize}px`;
+                }
+
+                // If still overflowing, reduce line height
+                if (forecast.scrollHeight > forecast.clientHeight) {
+                    let lineHeight = 1.4;
+                    while (forecast.scrollHeight > forecast.clientHeight && lineHeight > 1.1) {
+                        lineHeight -= 0.05;
+                        forecast.style.lineHeight = lineHeight;
+                    }
+                }
+
+                // If still overflowing, truncate text with ellipsis
+                if (forecast.scrollHeight > forecast.clientHeight) {
+                    const text = forecast.textContent;
+                    let truncatedText = text;
+                    let words = text.split(' ');
+
+                    while (forecast.scrollHeight > forecast.clientHeight && words.length > 10) {
+                        words.pop();
+                        truncatedText = words.join(' ') + '...';
+                        forecast.textContent = truncatedText;
+                    }
+                }
+
+                console.log(`Text fitting complete: Font size: ${fontSize}px, Available height: ${availableHeight}px`);
+            }
+
+            // Run text fitting after a short delay to ensure layout is complete
+            setTimeout(ensureTextFits, 100);
+
+            // Also run on any layout changes
+            const observer = new ResizeObserver(ensureTextFits);
+            observer.observe(document.body);
+        });
+
+        // Wait for text fitting to complete
+        await page.waitForTimeout(2000);
+
         console.log('📸 Taking screenshot...');
         const screenshot = await page.screenshot({
             type: 'png',
