@@ -5,6 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 // Configuration
 const SHARE_CARD_URL = 'https://bazigpt.io/api/daily-share-card-png';
 const BAZI_SITE_URL = 'bazigpt.io';
+const BAZI_SITE_DAILY_URL = 'bazigpt.io/daily';
 
 // Validate environment variables
 function validateEnv() {
@@ -172,7 +173,7 @@ async function sendToTelegram(screenshot) {
         console.log('📤 Sending message to Telegram channel...');
 
         const todayDate = getTodayDate();
-        const messageText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nCheck your chart → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
+        const messageText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nUnlock your exclusive Bazi forecast, today’s guidance is only available for a limited time! → ${BAZI_SITE_DAILY_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
 
         // Send photo with caption (optimized for Telegram)
         const result = await bot.sendPhoto(process.env.TELEGRAM_CHANNEL_ID, screenshot, {

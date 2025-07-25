@@ -5,6 +5,7 @@ const { TwitterApi } = require('twitter-api-v2');
 // Configuration
 const SHARE_CARD_URL = 'https://bazigpt.io/api/daily-share-card-png';
 const BAZI_SITE_URL = 'bazigpt.io';
+const BAZI_SITE_DAILY_URL = 'bazigpt.io/daily';
 
 // Validate environment variables
 function validateEnv() {
@@ -219,7 +220,7 @@ async function postTweet(screenshot) {
         const mediaId = await client.v1.uploadMedia(screenshot, { mimeType: 'image/png' });
 
         const todayDate = getTodayDate();
-        const tweetText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nCheck your chart → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
+        const tweetText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nDon’t let today’s Bazi wisdom slip away, get your personalized forecast before the day ends! → ${BAZI_SITE_DAILY_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
 
         console.log('📝 Posting tweet...');
         const tweet = await client.v2.tweet({
