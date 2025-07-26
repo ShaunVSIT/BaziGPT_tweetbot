@@ -194,7 +194,7 @@ async function sendToTelegram(screenshot) {
         console.log('📤 Sending message to Telegram channel...');
 
         const todayDate = getTodayDate();
-        const messageText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nCheck your chart → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
+        const messageText = `🗓️ Daily Bazi Forecast – ${todayDate}\n\nUnlock your exclusive Bazi forecast, today’s guidance is only available for a limited time! → ${BAZI_SITE_URL}\n\n#Bazi #ChineseAstrology #BaziGPT`;
 
         // Send photo with caption
         const result = await bot.sendPhoto(process.env.TELEGRAM_CHANNEL_ID, screenshot, {
