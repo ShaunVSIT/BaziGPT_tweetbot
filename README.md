@@ -7,6 +7,7 @@ A Twitter bot that automatically posts daily Bazi forecasts with share cards fro
 - 🗓️ **Daily Automation**: Posts every day at midnight UTC via GitHub Actions
 - 📸 **Screenshot Generation**: Uses Puppeteer to capture share cards from your API
 - 🐦 **Twitter Integration**: Seamlessly uploads and tweets with proper formatting
+- 📘 **Facebook Integration**: Posts daily forecasts to Facebook Page feed with story support
 - 🔒 **Secure**: Uses GitHub Secrets for API credentials
 - 🚀 **Production Ready**: Includes error handling and logging
 
@@ -90,6 +91,45 @@ Check your chart → bazigpt.io
 #Bazi #ChineseAstrology #BaziGPT
 ```
 
+## Facebook Integration
+
+The bot also supports Facebook Page posting with automatic story creation:
+
+### Feed Post
+- Posts daily Bazi forecast cards to your Facebook Page feed
+- Includes engaging caption with call-to-action
+- Optimized for mobile viewing
+
+### Story Post
+- Automatically creates a story version after each feed post
+- Uses story-optimized dimensions (1080x1920)
+- Includes "tap here" link back to the feed post
+- Acts as a teaser to drive engagement
+
+### Setup
+
+1. **Facebook Page Access Token**: Get from [Facebook Developers](https://developers.facebook.com/)
+2. **Page ID**: Your Facebook Page's numeric ID
+3. **Environment Variables**: Add to your `.env`:
+
+```bash
+FACEBOOK_PAGE_ACCESS_TOKEN=your_page_access_token
+FACEBOOK_PAGE_ID=your_page_id
+```
+
+### Usage
+
+```bash
+# Post to Facebook feed only
+npm run facebook
+
+# Post story only (for testing)
+npm run facebook-story
+
+# Test story functionality
+npm run test-facebook-story
+```
+
 ## Error Handling
 
 The bot includes comprehensive error handling for:
@@ -106,11 +146,16 @@ All errors are logged with clear messages for debugging.
 
 ```
 bazigpt_tweetbot/
-├── tweet.js              # Main bot logic
+├── tweet.js              # Main Twitter bot logic
+├── facebook.js           # Main Facebook bot logic
+├── facebookStory.js      # Facebook story functionality
 ├── package.json          # Dependencies and scripts
 ├── env.example          # Environment template
 ├── .github/workflows/   # GitHub Actions
 │   └── tweet-daily.yml
+├── tests/               # Test files
+│   ├── test-facebook.js
+│   └── test-facebook-story.js
 └── README.md           # This file
 ```
 
@@ -118,6 +163,8 @@ bazigpt_tweetbot/
 
 - **puppeteer**: Browser automation for screenshots
 - **twitter-api-v2**: Modern Twitter API client
+- **axios**: HTTP client for Facebook API calls
+- **form-data**: Form data handling for Facebook uploads
 - **dotenv**: Environment variable management
 
 ## Troubleshooting

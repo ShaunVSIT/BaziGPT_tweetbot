@@ -2,6 +2,7 @@ require('dotenv').config();
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 const FormData = require('form-data');
+const { postFacebookStory } = require('./facebookStory');
 
 // Configuration
 const SHARE_CARD_URL = 'https://bazigpt.io/api/daily-share-card-portrait';
@@ -192,7 +193,14 @@ async function postToFacebook(imageBuffer) {
         console.log('✅ Facebook post created successfully!');
         console.log(`🔗 Post ID: ${response.data.id}`);
 
-        return response.data;
+        // Get the permalink for the post
+        const permalink = `https://www.facebook.com/${process.env.FACEBOOK_PAGE_ID}/posts/${response.data.id}`;
+        console.log(`🔗 Post permalink: ${permalink}`);
+
+        return {
+            ...response.data,
+            permalink: permalink
+        };
 
     } catch (error) {
         console.error('❌ Error posting to Facebook:', error.response?.data || error.message);
@@ -215,9 +223,19 @@ async function main() {
         const screenshot = await captureScreenshot();
 
         // Post to Facebook page with image and caption
-        await postToFacebook(screenshot);
+        const postResult = await postToFacebook(screenshot);
 
         console.log('🎉 Daily Bazi forecast posted to Facebook successfully!');
+
+        // Post story version
+        try {
+            console.log('📱 Posting story version...');
+            await postFacebookStory(null);
+            console.log('🎉 Story posted successfully!');
+        } catch (storyError) {
+            console.error('⚠️ Warning: Story posting failed, but feed post was successful:', storyError.message);
+            // Don't fail the entire process if story posting fails
+        }
 
     } catch (error) {
         console.error('💥 Error in main process:', error.message);
