@@ -2,8 +2,8 @@ name: Daily Bazi Tweet
 
 on:
   schedule:
-    # Run daily at 00:10 UTC
-    - cron: '5 0 * * *'
+    # Run daily at 15:00 UTC (11pm SGT)
+    - cron: '00 15 * * *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:

@@ -2,8 +2,8 @@ name: Daily Bazi Facebook
 
 on:
   schedule:
-    # Run daily at 00:15 UTC (5 minutes after Telegram)
-    - cron: '15 0 * * *'
+    # Run daily at 15:05 UTC (5 minutes after twitter)
+    - cron: '05 15 * * *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
