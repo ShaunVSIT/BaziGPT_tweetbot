@@ -223,9 +223,10 @@ async function main() {
         const screenshot = await captureScreenshot();
 
         // Post to Facebook page with image and caption
-        const postResult = await postToFacebook(screenshot);
+        // const postResult = await postToFacebook(screenshot);
 
-        console.log('🎉 Daily Bazi forecast posted to Facebook successfully!');
+        // console.log('🎉 Daily Bazi forecast posted to Facebook successfully!');
+        console.log('Skipping Facebook post');
 
         // Post story version
         try {
